@@ -1,0 +1,28 @@
+- name: Open Firewall Ports
+  become: true
+  hosts:
+    - gamers
+  tags:
+    - firewall
+  tasks:
+    - name: Open Palworld server port
+      community.general.ufw:
+        rule: allow
+        dest: "{{ network.identifier }}.3.99"
+        port: "{{ item.port }}"
+        proto: udp
+        comment: "Palworld server"
+      with_items:
+        - { port: 8211 }
+        - { port: 27015 }
+
+- name: Deploy Palworld server
+  hosts:
+    - k3s_managers
+  tags:
+    - server
+  environment:
+    KUBECONFIG: "{{ kube_config_path }}"
+  become: true
+  roles:
+    - deploy

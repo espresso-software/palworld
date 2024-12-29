@@ -1,0 +1,27 @@
+---
+- name: Create RCON secret
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: palworld-rcon
+        namespace: palworld
+      data:
+        password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=16') | b64encode }}"
+
+- name: Deploy Palworld server
+  kubernetes.core.k8s:
+    definition: "{{ lookup('file', 'files/deployment.yml') }}"
+    state: present
+    namespace: palworld
+
+- name: Wait for Palworld server to be ready
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    namespace: palworld
+    name: palworld-server
+  register: palworld_server_info
+  until: palworld_server_info.resources[0].status.readyReplicas == 1
+  retries: 65
+  delay: 10

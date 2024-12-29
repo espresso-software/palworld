@@ -6,6 +6,11 @@ name: Ping
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Tags to run'
+        required: false
+        default: 'server'
   
   # Triggers the workflow on push or pull request events but only for the main branch
   # push:
@@ -20,7 +25,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: 
       - self-hosted
-      - ansible-runner
+      - ansible
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -31,8 +36,11 @@ jobs:
           token: ${{ secrets.READ_ACCESS_TOKEN }}
 
       # Runs a single command using the runners shell
-      - name: Run ping check
-        run: |
-          ansible-playbook -i inventory/hosts.ini ping.yml
+      - uses: espresso-software/actions/ansible/run-playbook@main
+        with:
+          playbook_path: deploy.yml
+          inventory_path: hosts/inventory.yml
+          with_vault: 'false'
+          tags: "${{ github.event.inputs.tags }}"
         
         
