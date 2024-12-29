@@ -1,4 +1,13 @@
 ---
+- name: Create Palworld namespace
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: palworld
+    state: present
+    
 - name: Create RCON secret
   kubernetes.core.k8s:
     definition:
