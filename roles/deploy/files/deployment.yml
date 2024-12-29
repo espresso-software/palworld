@@ -51,6 +51,8 @@ spec:
       labels:
         app: palworld-server
     spec:
+      nodeSelector:
+        kubernetes.io/role: gamer
       containers:
         - name: palworld-server
           image: thijsvanloef/palworld-server-docker:v1.2.2
