@@ -21,9 +21,37 @@
       data:
         rconPassword: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=16') | b64encode }}"
 
+- name: Create ConfigMap
+  run_once: true
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: palworld-cm
+        namespace: palworld
+      data:
+        PUID: "1000"
+        PGID: "1000"
+        PORT: "8211"
+        PLAYERS: "16"
+        MULTITHREADING: "true"
+        RCON_ENABLED: "true"
+        RCON_PORT: "25575"
+        TZ: UTC
+        COMMUNITY: "false"
+        SERVER_NAME: "Goon's Palworld"
+        SERVER_DESCRIPTION: "Ty is OP"
+        ENABLE_INVADER_ENEMY: 'False'
+        PAL_EGG_DEFAULT_HATCHING_TIME: '1.000000'
+        COLLECTION_DROP_RATE: '1.500000'
+        ENEMY_DROP_ITEM_RATE: '1.500000'
+        DEATH_PENALTY: ItemAndEquipment
+
 - name: Deploy Palworld server
   run_once: true
   kubernetes.core.k8s:
+    apply: yes
     definition: "{{ lookup('template', 'deployment.yml.j2') }}"
     state: present
     namespace: palworld
