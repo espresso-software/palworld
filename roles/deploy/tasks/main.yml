@@ -35,6 +35,6 @@
     namespace: palworld
     name: palworld-server
   register: palworld_server_info
-  until: palworld_server_info.resources[0].status.readyReplicas == 1
+  until: palworld_server_info.resources[0].status.availableReplicas == 1
   retries: 65
   delay: 10
