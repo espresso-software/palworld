@@ -24,7 +24,7 @@
 - name: Deploy Palworld server
   run_once: true
   kubernetes.core.k8s:
-    definition: "{{ lookup('file', 'files/deployment.yml') }}"
+    definition: "{{ lookup('template', 'deployment.yml.j2') }}"
     state: present
     namespace: palworld
 
