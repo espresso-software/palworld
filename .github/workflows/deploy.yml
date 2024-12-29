@@ -39,7 +39,7 @@ jobs:
       - uses: espresso-software/actions/ansible/run-playbook@main
         with:
           playbook_path: deploy.yml
-          inventory_path: hosts/inventory.ini
+          inventory_path: inventory/hosts.ini
           with_vault: 'false'
           tags: "${{ github.event.inputs.tags }}"
         
