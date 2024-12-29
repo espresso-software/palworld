@@ -24,6 +24,7 @@
 - name: Create ConfigMap
   run_once: true
   kubernetes.core.k8s:
+    apply: yes
     definition:
       apiVersion: v1
       kind: ConfigMap
