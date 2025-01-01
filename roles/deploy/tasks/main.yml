@@ -44,9 +44,10 @@
         SERVER_NAME: "Goon's Palworld"
         SERVER_DESCRIPTION: "Ty is OP"
         ENABLE_INVADER_ENEMY: 'False'
-        PAL_EGG_DEFAULT_HATCHING_TIME: '1.000000'
+        PAL_EGG_DEFAULT_HATCHING_TIME: '0.000000'
         COLLECTION_DROP_RATE: '1.500000'
         ENEMY_DROP_ITEM_RATE: '1.500000'
+        BUILD_OBJECT_DETERIORATION_DAMAGE_RATE: '0.000000'
         DEATH_PENALTY: ItemAndEquipment
 
 - name: Deploy Palworld server
