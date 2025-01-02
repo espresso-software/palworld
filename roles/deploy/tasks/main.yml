@@ -29,7 +29,7 @@
       apiVersion: v1
       kind: ConfigMap
       metadata:
-        name: palworld-cm
+        name: palworld-cm-20240102
         namespace: palworld
       data:
         PUID: "1000"
@@ -49,6 +49,7 @@
         ENEMY_DROP_ITEM_RATE: '1.500000'
         BUILD_OBJECT_DETERIORATION_DAMAGE_RATE: '0.000000'
         DEATH_PENALTY: ItemAndEquipment
+        BASE_CAMP_WORKER_MAX_NUM: '25'
 
 - name: Deploy Palworld server
   run_once: true
