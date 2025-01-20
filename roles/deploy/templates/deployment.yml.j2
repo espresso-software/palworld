@@ -13,6 +13,40 @@ spec:
     requests:
       storage: 12Gi
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-palworld-allow
+  namespace: palworld
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - ports:
+      - protocol: UDP
+        port: 8211
+      - protocol: UDP
+        port: 27015
+  egress:
+    - ports:
+      - protocol: UDP
+        port: 53
+      - protocol: TCP
+        port: 53
+          
+    - to:
+      - podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    - ports:
+      - protocol: TCP
+        port: {{ network.proxy | split(':') | last }}
+      to:
+      - ipBlock:
+          cidr: {{ network.proxy | split(':') | first }}/32
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,6 +92,12 @@ spec:
                 secretKeyRef:
                   name: palworld-secrets
                   key: rconPassword
+            - name: HTTP_PROXY
+              value: http://{{ network.proxy }}
+            - name: HTTPS_PROXY
+              value: http://{{ network.proxy }}
+            - name: FTP_PROXY
+              value: ftp://{{ network.proxy }}
           envFrom:
             - configMapRef:
                 name: palworld-cm-20240102
