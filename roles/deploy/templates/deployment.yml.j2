@@ -13,39 +13,20 @@ spec:
     requests:
       storage: 12Gi
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: projectcalico.org/v3
 kind: NetworkPolicy
 metadata:
   name: default-palworld-allow
   namespace: palworld
 spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
+  selector: all()
   ingress:
-    - ports:
-      - protocol: UDP
-        port: 8211
-      - protocol: UDP
-        port: 27015
-  egress:
-    - ports:
-      - protocol: UDP
-        port: 53
-      - protocol: TCP
-        port: 53
-          
-    - to:
-      - podSelector:
-          matchLabels:
-            k8s-app: kube-dns
-    - ports:
-      - protocol: TCP
-        port: {{ network.proxy | split(':') | last }}
-      to:
-      - ipBlock:
-          cidr: {{ network.proxy | split(':') | first }}/32
+    - action: Allow
+      protocol: UCP
+      destination:
+        ports:
+          - 8211
+          - 27015
 ---
 apiVersion: apps/v1
 kind: Deployment
